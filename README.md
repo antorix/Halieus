@@ -1,3 +1,3 @@
 # Territory (Участки)
 Простая программа для ведения участков собрания (Windows, Linux). Работоспособная бета-версия.
-[](img=https://pp.vk.me/c637616/v637616929/23fb2/9TQPDpLOO-g.jpg)
+![](https://pp.vk.me/c637616/v637616929/23fb2/9TQPDpLOO-g.jpg)
