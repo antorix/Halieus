@@ -1,4 +1,4 @@
 # Halieus
 Мощная программа для ведения участков собрания с функциями сортировки, экспорта, статистики, поиска, массовых операций, импорта и экспорта в Excel.
 
-![](https://lh3.googleusercontent.com/BqH9fgfsAIkzVMRX1HUhITYWDRKP0I_cu2ImuUMmT_MfS-JcAUOnHB9VuOeQ4yCm96oVQXyFia-l3vk=w1920-h1080-no)
+![](https://4.bp.blogspot.com/-UXWcKLRQ2Uk/WGt2wJ4T6TI/AAAAAAABRAs/pVcBD7QoMdwN_VjZ1KRmLQVAvp3qCHsrwCLcB/s1600/screenshot.png)
