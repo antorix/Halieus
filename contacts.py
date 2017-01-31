@@ -1,3 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Contacts module. Last modification date: 01/31/2017.
+# Updated from GitHub separately at each version update.
+
 import tkinter as tk 
 from tkinter import ttk
 import tkinter.messagebox as mb
