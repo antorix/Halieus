@@ -10,6 +10,7 @@ import xlwt
 from tkinter import filedialog 
 import webbrowser 
 from time import strftime, localtime 
+from classes import CreateToolTip ################### Kostik
  
 class MainTab(): 
     """Main tab of contacts""" 
@@ -72,13 +73,15 @@ anchor="e")
         self.ter.grid(column=1, row=0, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         tk.Label(self.editFrame, text="Адрес").grid(column=0, row=1, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.address=ttk.Entry(self.editFrame, width=self.entryWidth, state="disabled") 
-        self.address.grid(column=1, row=1, padx=self.root.padx, pady=self.root.pady, sticky="we")         
+        self.address.grid(column=1, row=1, padx=self.root.padx, pady=self.root.pady, sticky="we")
+        CreateToolTip(self.address, "В адрес входит улица и номер дома")        ################ Kostik
         tk.Label(self.editFrame, text="Имя").grid(column=0, row=2, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.name=ttk.Entry(self.editFrame, width=self.entryWidth, state="disabled")         
         self.name.grid(column=1, row=2, padx=self.root.padx, pady=self.root.pady, sticky="we") 
         tk.Label(self.editFrame, text="Не пос. до").grid(column=0, row=3, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.nonVisit=ttk.Entry(self.editFrame, width=self.entryWidth, state="disabled")         
-        self.nonVisit.grid(column=1, row=3, padx=self.root.padx, pady=self.root.pady, sticky="we") 
+        self.nonVisit.grid(column=1, row=3, padx=self.root.padx, pady=self.root.pady, sticky="we")
+        CreateToolTip(self.nonVisit, "Укажи тут дату до какого времени не посещать тех кто об этом попросил. (+2 года). Дату вносить в формате ГГГГ.ММ")          ################  Kostik
         self.saveButton=ttk.Button(self.editFrame, text="Сохранить изменения\nв контакте", image=self.root.img[36], compound="left", state="disabled", command=self.editCon) 
         self.saveButton.grid(column=1, columnspan=1, row=4, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw")  
          
@@ -87,12 +90,14 @@ anchor="e")
         tk.Label(self.new, text="Адрес").grid(column=0, row=0, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.addressNew=ttk.Entry(self.new, width=self.entryWidth, state="disabled") 
         self.addressNew.grid(column=1, row=0, padx=self.root.padx, pady=self.root.pady, sticky="we") 
+        CreateToolTip(self.addressNew, "В адрес входит улица и номер дома")        ################ Kostik
         tk.Label(self.new, text="Имя").grid(column=0, row=1, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.nameNew=ttk.Entry(self.new, width=self.entryWidth, state="disabled") 
         self.nameNew.grid(column=1, row=1, padx=self.root.padx, pady=self.root.pady, sticky="we")         
         tk.Label(self.new, text="Не пос. до").grid(column=0, row=2, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.nonVisitNew=ttk.Entry(self.new, width=self.entryWidth, state="disabled") 
-        self.nonVisitNew.grid(column=1, row=2, padx=self.root.padx, pady=self.root.pady, sticky="we")         
+        self.nonVisitNew.grid(column=1, row=2, padx=self.root.padx, pady=self.root.pady, sticky="we")
+        CreateToolTip(self.nonVisitNew, "Укажи тут дату до какого времени не посещать тех кто об этом попросил. (+2 года). Дату вносить в формате ГГГГ.ММ")       ################ Kostik
         self.newButton=ttk.Button(self.new, state="disabled", image=self.root.img[21], compound="left", command=self.newSave) 
         self.newButton.grid(column=1, columnspan=1, row=3, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw") 
          
