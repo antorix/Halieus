@@ -44,7 +44,6 @@ anchor="e")
         self.conList.heading(1, image=self.root.img[3])        
         self.conList.column(0, width=1)
         self.conList.column(4, width=70)
-        #self.conList.column(2, width=1)
         self.rightScrollbar = ttk.Scrollbar(self.conList, orient="vertical", command=self.conList.yview) 
         self.conList.configure(yscrollcommand=self.rightScrollbar.set) 
         self.rightScrollbar.pack(side="right", fill="y") 
@@ -102,7 +101,14 @@ anchor="e")
         self.newButton.grid(column=1, columnspan=1, row=3, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw") 
          
         self.chosenTer=tk.Label(self.tabCon, image=self.root.img[25], compound="left") # chosen ter on ter tab 
-        self.chosenTer.grid(column=1,row=1, sticky="es") 
+        self.chosenTer.grid(column=1,row=1, sticky="ws")
+        CreateToolTip(self.chosenTer, "Этот участок выбран на вкладке участков")
+       
+        self.hide=tk.IntVar()                                                   # hide all contacts not from chosen ter
+        self.hide.set(0)
+        self.hideButton=ttk.Checkbutton(self.tabCon, text="Скрыть остальные", variable=self.hide, command=self.update)
+        self.hideButton.grid(column=1,row=1, sticky="es")
+        CreateToolTip(self.hideButton, "Скрыть контакты участков, не принадлежащих выбранному")
      
     def drawList(self): 
         self.conList.delete(*self.conList.get_children())
@@ -243,9 +249,10 @@ self.nonVisitNew.get().strip()))
         self.nonVisitNumber=0 
         for ter in self.root.db: 
             if len(ter.extra)>0: 
-                for e in range(len(ter.extra[0])): 
-                    self.content.append([ter.number, ter.extra[0][e][0], ter.extra[0][e][1], ter.extra[0][e][2], ter, e])         
-                    if ter.extra[0][e][2].strip()!="": self.nonVisitNumber+=1 
+                for e in range(len(ter.extra[0])):
+                    if self.hide.get()==0 or self.selected==ter:
+                        self.content.append([ter.number, ter.extra[0][e][0], ter.extra[0][e][1], ter.extra[0][e][2], ter, e])         
+                        if ter.extra[0][e][2].strip()!="": self.nonVisitNumber+=1 
         if self.sortCon.get()==0: 
             try: self.content.sort(key=lambda x: int(x[0]))  
             except: self.content.sort(key=lambda x: x[0])           
@@ -299,7 +306,7 @@ class TerTab():
         self.tab.grid_rowconfigure (1, weight=1) 
         self.info=tk.Label(self.tab, image=None, compound="right") 
         self.info.grid(column=0, columnspan=2, row=0, sticky="e") 
-        ttk.Button(self.info, text="Экспорт", image=self.card.root.img[13], compound="left", command=self.export).grid(column=1,row=0, sticky="e")       
+        ttk.Button(self.info, text="Экспорт", image=self.card.root.img[13], compound="left", command=self.export).grid(column=1,row=0, sticky="w")       
         self.list=tk.Listbox(self.tab, relief="flat", activestyle="dotbox", font="{%s} 9" % self.card.root.listFont.get()) # list 
         self.list.grid(column=0, row=1, columnspan=2, rowspan=2, padx=self.card.root.padx*2, sticky="nesw") 
         rightScrollbar = ttk.Scrollbar(self.list, orient="vertical", command=self.list.yview) 
