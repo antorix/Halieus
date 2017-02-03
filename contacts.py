@@ -363,7 +363,7 @@ class TerTab():
             self.card.ter.extra[0].sort(key=lambda x: x[0])  
             output=[] 
             for i in range(len(self.card.ter.extra[0])): 
-                if self.card.ter.extra[0][i][2]!="": nonVisit="(не пос. до %s)" % self.card.ter.extra[0][i][2].strip()
+                if self.card.ter.extra[0][i][2]!="": nonVisit=" (не пос. до %s)" % self.card.ter.extra[0][i][2].strip()
                 else: nonVisit="" 
                 output.append([i+1, self.card.ter.extra[0][i][0][:14], self.card.ter.extra[0][i][1]+nonVisit]) 
             return output 
