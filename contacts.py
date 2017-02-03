@@ -6,7 +6,8 @@
 import tkinter as tk  
 from tkinter import ttk 
 import tkinter.messagebox as mb 
-import xlwt 
+import xlwt
+import xlrd
 from tkinter import filedialog 
 import webbrowser 
 from time import strftime, localtime 
@@ -21,14 +22,16 @@ class MainTab():
         self.tabCon=tk.Frame(self.root.notebook)                                    
         self.root.notebook.add(self.tabCon, text="Контакты", image=self.root.img[21], compound="left") 
         self.tabCon.columnconfigure(0, weight=1) 
+        self.tabCon.rowconfigure(0, weight=1) 
         self.tabCon.rowconfigure(1, weight=1) 
+        self.tabCon.rowconfigure(2, weight=1) 
         self.tabCon.bind("<Visibility>", self.update) 
         self.entryWidth=35                                                      # width of the fields         
         self.selected=None 
          
         # Contacts frame 
         self.conFrame=tk.Frame(self.tabCon) 
-        self.conFrame.grid(column=0, columnspan=1, row=0, rowspan=2, sticky="wnse") 
+        self.conFrame.grid(column=0, columnspan=1, row=0, rowspan=4, sticky="wnse") 
          
         self.statFrame=tk.Frame(self.conFrame)                                  # statistics 
         self.statFrame.pack(fill="x") 
@@ -65,7 +68,7 @@ anchor="e")
         self.listbar.add_cascade(label="Действия", menu=self.listmenu) 
          
         self.editFrame=tk.Frame(self.tabCon)                                    # editing 
-        self.editFrame.grid(column=1, row=0, sticky="sew") 
+        self.editFrame.grid(column=1, row=0, sticky="new") 
         self.editFrame.columnconfigure(1, weight=1) 
         self.editFrame.rowconfigure(0, weight=1) 
         self.ter=tk.Label(self.editFrame) 
@@ -85,7 +88,7 @@ anchor="e")
         self.saveButton.grid(column=1, columnspan=1, row=4, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw")  
          
         self.new=ttk.LabelFrame(self.tabCon, text="Новый контакт")              # new contact 
-        self.new.grid(column=1,row=1, padx=self.root.padx, pady=self.root.pady, sticky="we") 
+        self.new.grid(column=1,row=1, padx=self.root.padx, pady=self.root.pady, sticky="new") 
         tk.Label(self.new, text="Адрес").grid(column=0, row=0, padx=self.root.padx, pady=self.root.pady, sticky="w") 
         self.addressNew=ttk.Entry(self.new, width=self.entryWidth, state="disabled") 
         self.addressNew.grid(column=1, row=0, padx=self.root.padx, pady=self.root.pady, sticky="we") 
@@ -98,16 +101,19 @@ anchor="e")
         self.nonVisitNew.grid(column=1, row=2, padx=self.root.padx, pady=self.root.pady, sticky="we")
         CreateToolTip(self.nonVisitNew, "Укажи тут дату, до какого времени не посещать тех, кто об этом попросил (+2 года). Дату вносить в формате ГГГГ.ММ")
         self.newButton=ttk.Button(self.new, state="disabled", image=self.root.img[21], compound="left", command=self.newSave) 
-        self.newButton.grid(column=1, columnspan=1, row=3, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw") 
+        self.newButton.grid(column=1, columnspan=1, row=3, rowspan=2, padx=self.root.padx, pady=self.root.pady, sticky="nesw")
+       
+        ttk.Button(self.tabCon, text="Импорт контактов", image=self.root.img[75], compound="top", command=self.importCon)\
+        .grid(column=1,row=2, padx=self.root.padx, pady=self.root.pady, sticky="ne") # import
          
         self.chosenTer=tk.Label(self.tabCon, image=self.root.img[25], compound="left") # chosen ter on ter tab 
-        self.chosenTer.grid(column=1,row=1, sticky="ws")
+        self.chosenTer.grid(column=1,row=3, sticky="ws")
         CreateToolTip(self.chosenTer, "Этот участок выбран на вкладке участков")
        
         self.hide=tk.IntVar()                                                   # hide all contacts not from chosen ter
         self.hide.set(0)
         self.hideButton=ttk.Checkbutton(self.tabCon, text="Скрыть остальные", variable=self.hide, command=self.update)
-        self.hideButton.grid(column=1,row=1, sticky="es")
+        self.hideButton.grid(column=1,row=3, sticky="es")
         CreateToolTip(self.hideButton, "Скрыть контакты участков, не принадлежащих выбранному")
      
     def drawList(self): 
@@ -214,7 +220,7 @@ anchor="e")
         self.selectedCon[2]=self.nonVisit.get().strip() 
         self.root.log("Контакт в участке %s изменен на «%s, %s, %s»." % (self.selectedTer.number, self.selectedCon[0], self.selectedCon[1], self.selectedCon[2])) 
         self.root.save() 
-        self.update() 
+        self.update()
          
     def moveCon(self, event=None):         
         if self.selected==None: mb.showwarning("Ошибка", "Для переноса выберите один участок на вкладке участков.") 
@@ -271,7 +277,8 @@ self.nonVisitNew.get().strip()))
         wb=xlwt.Workbook() 
         ws=wb.add_sheet("Контакты не посещать") 
         row=0
-        shrink=xlwt.easyxf('alignment: shrink True')         
+        shrink=xlwt.easyxf('alignment: shrink True')
+        self.content.sort(key=lambda x: x[3], reverse=True)        
         for i in range(len(self.content)): 
             if self.content[i][3]!="": 
                 ws.write(row, 0, "№%s-%s" % (self.content[i][0], self.content[i][4].address), style=shrink) 
@@ -295,6 +302,36 @@ self.nonVisitNew.get().strip()))
                 print("export successful") 
                 self.root.log("Выполнен экспорт контактов в файл %s." % filename) 
                 if mb.askyesno("Экспорт", "Экспорт успешно выполнен. Открыть созданный файл?")==True: webbrowser.open(filename) 
+                
+    def importCon(self):
+        mb.showinfo("Импорт контактов", "Данная функция позволяет импортировать контакты из Excel-файла, в котором каждому контакту соответствует одна строка, при этом должны быть столбцы:\nA – адрес, B – имя, C – дата.\nПорядок контактов не важен. Все контакты будут импортированы в новый участок с номером 0. Затем перенесите их в нужные участки и удалите данный участок.")
+        ftypes = [('Книга Excel 97-2003 (*.xls)', '.xls')]
+        filename=filedialog.askopenfilename(filetypes=ftypes, defaultextension='.xls')
+        if filename!="":
+            try: book = xlrd.open_workbook(filename, formatting_info=True)
+            except:
+                mb.showerror("Ошибка", "Не удалось импортировать файл %s. Он поврежден или имеет неверный формат." % filename)
+                print("import error")
+                self.root.log("Ошибка импорта контактов из файла %s" % filename)
+                self.root.updateLog()
+            else:
+                self.root.newTer(silent=True, number="0", type="Имп", address="Импортировано", note="Импортированные контакты. Перенесите их в нужные участки. Затем данный участок можно удалить.")
+                newTer=self.root.db[len(self.root.db)-1]
+                newTer.extra.append([])
+                print(newTer.type)
+                sheet = book.sheet_by_index(0)
+                def format(value):
+                    value=(str(value)).strip()
+                    if ".0" in value: value=value[ : value.index(".0")]
+                    return value
+                for row in range(sheet.nrows):
+                    newTer.extra[0].append([format(sheet.cell(row,0).value), format(sheet.cell(row,1).value), format(sheet.cell(row,2).value)])        
+                    #if sheet.ncols>=1: number=format(sheet.cell(row,0).value)
+                self.root.save()
+                self.root.updateS()
+                self.root.log("Импортированы контакты из файла %s." % filename)
+                print("import successful")
+                self.update()
  
 class TerTab(): 
     """Tab inside ter"""     
@@ -306,27 +343,31 @@ class TerTab():
         self.tab.grid_rowconfigure (1, weight=1) 
         self.info=tk.Label(self.tab, image=None, compound="right") 
         self.info.grid(column=0, columnspan=2, row=0, sticky="e") 
-        ttk.Button(self.info, text="Экспорт", image=self.card.root.img[13], compound="left", command=self.export).grid(column=1,row=0, sticky="w")       
-        self.list=tk.Listbox(self.tab, relief="flat", activestyle="dotbox", font="{%s} 9" % self.card.root.listFont.get()) # list 
-        self.list.grid(column=0, row=1, columnspan=2, rowspan=2, padx=self.card.root.padx*2, sticky="nesw") 
-        rightScrollbar = ttk.Scrollbar(self.list, orient="vertical", command=self.list.yview) 
-        self.list.configure(yscrollcommand=rightScrollbar.set) 
-        rightScrollbar.pack(side="right", fill="y") 
-        contacts=self.getContent() 
-        self.content=tk.StringVar(value=tuple(contacts)) 
-        self.list.configure(listvariable=self.content)         
+        ttk.Button(self.info, text="Экспорт", image=self.card.root.img[13], compound="left", command=self.export).grid(column=1,row=0, sticky="w")               
+        self.headers=["", "Адрес", "Имя"]
+        self.list=ttk.Treeview(self.tab, padding=(0,0,20,0), columns=self.headers, selectmode="browse", show="headings", style="Treeview")
+        self.list.grid(column=0, row=1, columnspan=2, rowspan=2, padx=self.card.root.padx, sticky="nesw") 
+        self.list.column(0, width=1)
+        self.list.column(1, width=70)
+        self.rightScrollbar = ttk.Scrollbar(self.list, orient="vertical", command=self.list.yview) 
+        self.list.configure(yscrollcommand=self.rightScrollbar.set) 
+        self.rightScrollbar.pack(side="right", fill="y")     
+        self.list.delete(*self.list.get_children())
+        contacts=self.getContent()
+        self.values=tuple(contacts)
+        for col in self.headers: self.list.heading(col, text=col.title())
+        for item in self.values: self.list.insert('', 'end', values=item)        
         ttk.Label(self.info, text="Контактов: %d" % len(contacts)).grid(column=0,row=0, sticky="w")         
          
     def getContent(self): 
         if len(self.card.ter.extra)==0: return [] 
         else:             
-            try: self.card.ter.extra.sort(key=lambda x: int(x[0]))  
-            except: self.card.ter.extra.sort(key=lambda x: x[0])  
+            self.card.ter.extra[0].sort(key=lambda x: x[0])  
             output=[] 
             for i in range(len(self.card.ter.extra[0])): 
-                if self.card.ter.extra[0][i][2]!="": nonVisit="(не пос.до %s)" % self.card.ter.extra[0][i][2] 
+                if self.card.ter.extra[0][i][2]!="": nonVisit="(не пос. до %s)" % self.card.ter.extra[0][i][2].strip()
                 else: nonVisit="" 
-                output.append("%3d) %-14s %s" % (i+1, self.card.ter.extra[0][i][0][:14], self.card.ter.extra[0][i][1]+nonVisit)) 
+                output.append([i+1, self.card.ter.extra[0][i][0][:14], self.card.ter.extra[0][i][1]+nonVisit]) 
             return output 
              
     def export(self): 
