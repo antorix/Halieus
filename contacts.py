@@ -318,15 +318,13 @@ self.nonVisitNew.get().strip()))
                 self.root.newTer(silent=True, number="0", type="Имп", address="Импортировано", note="Импортированные контакты. Перенесите их в нужные участки. Затем данный участок можно удалить.")
                 newTer=self.root.db[len(self.root.db)-1]
                 newTer.extra.append([])
-                print(newTer.type)
-                sheet = book.sheet_by_index(0)
+                sheet=book.sheet_by_index(0)
                 def format(value):
                     value=(str(value)).strip()
                     if ".0" in value: value=value[ : value.index(".0")]
                     return value
                 for row in range(sheet.nrows):
                     newTer.extra[0].append([format(sheet.cell(row,0).value), format(sheet.cell(row,1).value), format(sheet.cell(row,2).value)])        
-                    #if sheet.ncols>=1: number=format(sheet.cell(row,0).value)
                 self.root.save()
                 self.root.updateS()
                 self.root.log("Импортированы контакты из файла %s." % filename)
