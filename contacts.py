@@ -114,7 +114,7 @@ anchor="e")
         self.hide.set(0)
         self.hideButton=ttk.Checkbutton(self.tabCon, text="Скрыть остальные", variable=self.hide, command=self.update)
         self.hideButton.grid(column=1,row=3, sticky="es")
-        CreateToolTip(self.hideButton, "Скрыть контакты участков, не принадлежащих выбранному")
+        CreateToolTip(self.hideButton, "Скрыть контакты участков, не принадлежащие выбранному")
      
     def drawList(self): 
         self.conList.delete(*self.conList.get_children())
