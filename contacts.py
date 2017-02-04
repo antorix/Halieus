@@ -169,7 +169,7 @@ anchor="e")
             self.saveButton["state"]="disabled"         
          
     def getSelectedCon(self): 
-        """Return ter.extra object of item selected from list as [0], and all self.selected attributes as [1]""" 
+        """Return ter.extra object of item selected from list as [0], and all self.content attributes as [1]""" 
         curItem = self.conList.focus()
         s=self.conList.item(curItem)["values"][0]-1
         return self.content[s][4].extra[0][self.content[s][5]], self.content[s] 
