@@ -145,7 +145,7 @@ anchor="e")
     def listSelect(self, event=None): 
         if len(self.conList.selection())==1: 
             self.selectedCon=self.getSelectedCon()[0] 
-            self.selectedTer=self.getSelectedTer() 
+            self.selectedTer=self.getSelectedTer()          
             self.address["state"]="normal" 
             self.address.delete(0, "end") 
             self.address.insert(0, self.getSelectedCon()[0][0]) 
@@ -236,6 +236,7 @@ anchor="e")
         try: s=self.conList.item(curItem)["values"][0]-1
         except: return        
         con=self.content[s][4].extra[0][self.content[s][5]] 
+
         if move==False: self.root.log("Удален контакт в участке %s (%s, %s, %s)." % (self.getSelectedTer().number, con[0], con[1], con[2])) 
         del self.content[s][4].extra[0][self.content[s][5]] 
         self.root.save() 
@@ -266,7 +267,7 @@ self.nonVisitNew.get().strip()))
         elif self.sortCon.get()==2: self.content.sort(key=lambda x: x[2])  
         elif self.sortCon.get()==3: self.content.sort(key=lambda x: x[3], reverse=True)          
         for i in range(len(self.content)): 
-            self.contentFormatted.append((i+1, "№%s–%s" % (self.content[i][0][:5], self.content[i][4].address[:25]), self.content[i][1][:25], self.content[i][2][:25], self.content[i][3])) 
+            self.contentFormatted.append((i+1, "№%s–%s" % (self.content[i][0], self.content[i][4].address), self.content[i][1], self.content[i][2], self.content[i][3])) 
         return self.contentFormatted 
  
     def openTer(self, event=None): 
@@ -365,7 +366,7 @@ class TerTab():
             for i in range(len(self.card.ter.extra[0])): 
                 if self.card.ter.extra[0][i][2]!="": nonVisit=" (не пос. до %s)" % self.card.ter.extra[0][i][2].strip()
                 else: nonVisit="" 
-                output.append([i+1, self.card.ter.extra[0][i][0][:14], self.card.ter.extra[0][i][1]+nonVisit]) 
+                output.append([i+1, self.card.ter.extra[0][i][0], self.card.ter.extra[0][i][1]+nonVisit]) 
             return output 
              
     def export(self): 
