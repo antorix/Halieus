@@ -39,10 +39,10 @@ class MainTab():
 anchor="e") 
         self.stat=tk.Label(self.statFrame) 
         self.stat.pack(side="right", anchor="e")        
-         
+        
         self.headers=["", "Участок", "Адрес", "Имя", "Не пос. до"]              # list 
         self.style = ttk.Style()
-        self.style.configure("Treeview", bd=0, relief="flat")
+        self.style.configure("Treeview", font=('', 9))
         self.conList=ttk.Treeview(self.conFrame, padding=(0,0,20,0), columns=self.headers, selectmode="browse", show="headings", style="Treeview")
         self.conList.heading(1, image=self.root.img[3])        
         self.conList.column(0, width=1)
