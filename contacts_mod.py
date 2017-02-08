@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Updated separately from GitHub on each version update.
 import xlwt
+import os
 import webbrowser
 from tkinter import ttk
 from tkinter import filedialog 
@@ -72,8 +73,6 @@ def exportNonVisit(self, event=None):
         else: 
             self.root.log("Выполнен экспорт контактов в файл %s." % filename) 
             if mb.askyesno("Экспорт", "Экспорт успешно выполнен. Открыть созданный файл?")==True: webbrowser.open(filename)
-
- 
             
 def exportTab(self): 
     wb=xlwt.Workbook() 
@@ -129,3 +128,7 @@ def exportTab(self):
             print("export successful") 
             self.root.log("Выполнен экспорт контактов участка %s в файл %s." % (self.ter.number, filename)) 
             if mb.askyesno("Экспорт", "Экспорт успешно выполнен. Открыть созданный файл?")==True: webbrowser.open(filename) 
+
+def convertNumber(filename):
+    relpath=os.path.relpath(filename, '.xls')
+    return relpath[3:relpath.index(".xls")]
