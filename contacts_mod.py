@@ -74,9 +74,9 @@ def exportNonVisit(self, event=None):
             self.root.log("Выполнен экспорт контактов в файл %s." % filename) 
             if mb.askyesno("Экспорт", "Экспорт успешно выполнен. Открыть созданный файл?")==True: webbrowser.open(filename)
             
-def exportTab(self): 
-    wb=xlwt.Workbook() 
-    ws=wb.add_sheet("Контакты") 
+def exportTab(self):
+    wb=xlwt.Workbook()
+    ws=wb.add_sheet("Контакты")
     pagesTotal=1 
     date=strftime("%d.%m", localtime()) + "." + str(int(strftime("%Y", localtime()))-2000) 
     remark =    xlwt.easyxf('alignment: shrink True;' 'font: height 200;' 'font: bold False;' 'alignment: horizontal center') 
@@ -86,32 +86,33 @@ def exportTab(self):
     contactAll=    xlwt.easyxf('alignment: shrink True;' 'font: height 250;' 'borders: top thin, left thin, bottom thin') 
     contactEmpty=    xlwt.easyxf('alignment: shrink True;' 'font: height 250') 
     #ws.write_merge(0,0, 0,1, "Не используй этот лист для записей! Перед сдачей участка вычеркни", style=remark) 
-    #ws.write_merge(1,1, 0,1, "переехавших и аккуратно допиши новых на другой стороне.", style=remark)
-    ws.write_merge(0,0, 0,1, "Участок №%s - %s,  (%d)" % (self.ter.number, self.ter.address, len(self.ter.extra[0])), style=header1) 
+    #ws.write_merge(1,1, 0,1, "переехавших и аккуратно допиши новых на другой стороне.", style=remark)    
+    if len(self.ter.extra)!=0: contactsNumber=len(self.ter.extra[0])
+    else: contactsNumber=0    
+    ws.write_merge(0,0, 0,1, "Участок №%s - %s (%d)" % (self.ter.number, self.ter.address, contactsNumber), style=header1) 
     ws.write_merge(21,21, 0,1, "Последний обработал: %s %s" % (self.ter.getPublisherFinished(), self.ter.getDateLastSubmit()), style=header2) 
     ws.col(0).width = 4500 
     ws.col(1).width = 6500      
-    if len(self.ter.extra)!=0:                                             # writing contacts, if exist 
-        row=1 
-        col=0 
-        if len(self.ter.extra[0])>20: pagesTotal=2 
-        address=""             
-        try: self.ter.extra[0].sort(key=lambda x: int(x[0]))  
-        except: self.ter.extra[0].sort(key=lambda x: x[0])  
-        for e in self.ter.extra[0]: 
-            if address!=e[0]+"\u00A0": 
-                address=e[0]+"\u00A0" 
-                ws.write(row, col, address,style=contactTop)                     
-            else: ws.write(row, col, "–",style=contactEmpty) 
-            if e[2]!="": nonVisit="(не пос-ть)"
-            else: nonVisit="\u00A0" 
-            ws.write(row, col+1, e[1]+nonVisit ,style=contactAll) 
-            row+=1 
-            if row>=20: 
-                col+=2                     
-                ws.col(col).width = 4500 
-                ws.col(col+1).width = 6500 
-                row=1         
+    row=1 
+    col=0 
+    if len(self.ter.extra[0])>20: pagesTotal=2 
+    address=""             
+    try: self.ter.extra[0].sort(key=lambda x: int(x[0]))  
+    except: self.ter.extra[0].sort(key=lambda x: x[0])  
+    for e in self.ter.extra[0]: 
+        if address!=e[0]+"\u00A0": 
+            address=e[0]+"\u00A0" 
+            ws.write(row, col, address,style=contactTop)                     
+        else: ws.write(row, col, "–",style=contactEmpty) 
+        if e[2]!="": nonVisit="(не пос-ть)"
+        else: nonVisit="\u00A0" 
+        ws.write(row, col+1, e[1]+nonVisit ,style=contactAll) 
+        row+=1 
+        if row>=20: 
+            col+=2                     
+            ws.col(col).width = 4500 
+            ws.col(col+1).width = 6500 
+            row=1         
     ws.write_merge(22,22, 0,1, "(%s) Вернуть с участком! Стр. 1/%d" % (date, pagesTotal), style=remark) 
     if pagesTotal==2: 
         ws.write_merge(0,0, 2,3, "Участок №%s - %s,  (%d)" % (self.ter.number, self.ter.address, len(self.ter.extra[0])), style=header1) 
