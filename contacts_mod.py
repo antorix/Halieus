@@ -40,7 +40,7 @@ def getContentMod(self):
     else:             
         self.ter.extra[0].sort(key=lambda x: x[0])  
         output=[] 
-        for i in range(len(self.ter.extra[0])): 
+        for i in range(len(self.ter.extra[0])):
             if self.ter.extra[0][i][2]!="": nonVisit=" (не пос. до %s)" % self.ter.extra[0][i][2].strip()
             else: nonVisit="" 
             output.append([i+1, self.ter.extra[0][i][0], self.ter.extra[0][i][1]+nonVisit]) 
@@ -52,8 +52,8 @@ def exportNonVisit(self, event=None):
     row=0
     shrink=xlwt.easyxf('alignment: shrink True')
     self.content.sort(key=lambda x: x[3])        
-    for i in range(len(self.content)): 
-        if self.content[i][3]!="": 
+    for i in range(len(self.content)):
+        if self.exportType.get()==0 or self.content[i][3]!="": 
             ws.write(row, 0, "№%s-%s" % (self.content[i][0], self.content[i][4].address), style=shrink) 
             ws.write(row, 1, self.content[i][1]+"\u00A0", style=shrink) 
             ws.write(row, 2, self.content[i][2]+"\u00A0", style=shrink)
