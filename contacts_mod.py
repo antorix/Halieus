@@ -20,10 +20,13 @@ def init(self):
     CreateToolTip(self.address, tip1)
     CreateToolTip(self.noteNew, tip2)
     CreateToolTip(self.note, tip2)    
+    
     self.exportButton.bind("<1>", lambda x: exportNonVisit(self))
     ttk.Radiobutton(self.buttonFrame, text="Только\nне пос.", variable=self.exportType, value=1).grid(column=2,row=2, padx=self.root.padx*5, pady=self.root.pady, sticky="nw")
     ttk.Label(self.editFrame, text="Не пос.").grid(column=0, row=3, padx=self.root.padx, pady=self.root.pady, sticky="w") 
     ttk.Label(self.new, text="Не пос.").grid(column=0, row=2, padx=self.root.padx, pady=self.root.pady, sticky="w") 
+    self.address["width"]=50
+    self.addressNew["width"]=50
 
 def terInit(self):
     self.tabContacts.list.grid_remove()
