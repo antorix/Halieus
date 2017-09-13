@@ -4,8 +4,8 @@ Congregation territory manager
 
 Ведение участков собрания
 
-* **Информация | Information:**
+* **Information | Информация:**
 https://www.facebook.com/halieusjw/
 
-* **Загрузка | Download:**
+* **Download | Загрузка:**
 https://github.com/antorix/Halieus/raw/master/halieus.zip
