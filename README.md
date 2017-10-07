@@ -1,6 +1,6 @@
 # Halieus
 
-Congregation territory manager
+Congregation territory manager (English, German and Russian languages supported)
 
 Ведение участков собрания
 
